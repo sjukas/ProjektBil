@@ -1,0 +1,70 @@
+/*
+ * BilProjekt.c
+ *
+ * Created: 2023-04-05 14:16:34
+ * Author : lucas
+ */ 
+
+#include <avr/io.h>
+
+
+int main(void)
+{
+    /* Replace with your application code */
+    while (1) 
+    {
+    }
+}
+
+
+void drive_forward(void){
+	
+	
+	
+}
+
+void stop(){
+	
+	
+}
+
+void turn_right(int degrees){
+	
+	
+}
+
+void turn_left(int degrees){
+	
+	
+	
+}
+
+void drive_backward(){
+	// denna funktion ska anropas ifall ett hinder varit på samma plats för länge. Man kan då anta att bilen råkat köra in i skiten och därmed måste backa
+	
+}
+
+int servo_control(){
+	// dela upp sensorns i 4 sektioner
+	//läs sensor i varje kvadrant
+	
+	//om någonting avläses ska siffran för den sektion skickas till funktionerna H - bryggan; turn_right / turn_left
+	
+	
+	
+	return section;
+}
+
+int read_sensor(){
+	
+	// skicka en 1a ifall något dyker upp
+	
+	
+	
+	return n;
+}
+
+void init(){
+	
+
+}
