@@ -6,7 +6,7 @@
  */ 
 
 #include <avr/io.h>
-
+#include <util/delay.h>
 
 int main(void)
 {
@@ -64,7 +64,54 @@ int read_sensor(){
 	return n;
 }
 
-void init(){
-	
+void hbrigde_init(){
+		
+		DDRB |= 
 
 }
+
+void pwm_init(){
+	
+	//initalizar timer/counter för att cleara OC3A/OC3B på "compare match", enligt 17-9 i databladet
+	TCCR3A |= (1 << COM3A1) |(0 << COM3A0) | (1 << COM3B1) | (0 << COM3B0);
+	
+	
+	// initialize fast PWM med ICR3 som Top enligt tabell 17-11 i databladet, mode 14
+	TCCR3A |= (1 << WGM31);
+	TCCR3B |= (1 << WGM32) | (1 << WGM33);
+	
+	//sätt pinb4 som output, kan vara något annat dock
+	DDRB |= (1 << PINB4);
+	
+	// sätter divisionfaktor till 64 enligt tabell 17-12, kan enkelt ändras
+	TCCR3B |= (0 << CS32) | (1 << CS31) | (1 << CS30);
+	
+}
+
+void set_pulse(uint16_t pulse){
+	//enligt handledning i labb 2, sätter pulsen genom att sätta output compare register till ett värde
+	OCR3A = pulse;
+}
+
+void set_period(uint16_t period){
+	// enligt handledning i labb 2, sätter perioden genom att sätta Input compare register till ett värde
+	ICR3 = period;
+}
+
+void adc_init(){
+	ADCSRA |= (1 << ADEN);
+	ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
+	ADMUX |= (1 << REFS0); //referensspänning 
+	
+	// DDRX |= XX, här måste vi välja vart vi ska koppla upp
+}
+
+
+uint16_t adc_read(){
+	//här måste vi sätta ett register som input
+	ADCSRA |= (1<<ADSC);
+	while(ADCSRA&(1<<ADSC)){} //vänta på adc conversionen
+	return ADC;
+}
+
+//generera avbrott med lagom intervall, med en typ timer. Då ska vi ändra vinkel och läsa input
